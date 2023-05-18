@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 09:42:36 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/18 14:56:12 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:25:49 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	*doctor(void *table_ptr)
 	{
 		pthread_mutex_lock(&philo->lock);
 		if (get_time() >= philo->time_to_die && philo->eating == 0)
-			status("DIED", philo);
+			status(DIED, philo);
 		if (philo->eat_count == philo->table->meals_nb)
 		{
 			pthread_mutex_lock(&philo->table->lock);
@@ -63,7 +63,7 @@ void	*lunch(void *philo_ptr)
 	while (philo->table->death == 0)
 	{
 		eat(philo);
-		status("THINKING", philo);
+		status(THINKING, philo);
 	}
 	if (pthread_join(philo->t1, NULL))
 		return ((void *)1);

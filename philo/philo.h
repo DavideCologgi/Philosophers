@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:03:03 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/18 14:49:06 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:24:57 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,25 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define TAKE_FORKS "has taken a fork"
+# define THINKING "is thinking"
+# define SLEEPING "is sleeping"
+# define EATING "is eating"
+# define DIED "died"
+
+typedef struct s_philo{
+	struct s_table	*table;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*r_fork;
+	pthread_t		t1;
+	int				id;
+	int				status;
+	int				eat_count;
+	int				eating;
+	int				time_to_die;
+}	t_philo;
 
 typedef struct s_table{
 	t_philo			*philos;
@@ -36,19 +55,6 @@ typedef struct s_table{
 	int				death;
 	int				finish;
 }	t_table;
-
-typedef struct s_philo{
-	struct s_table	*table;
-	pthread_mutex_t	lock;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
-	pthread_t		t1;
-	int				id;
-	int				status;
-	int				eat_count;
-	int				eating;
-	int				time_to_die;
-}	t_philo;
 
 // Funzioni utils.c
 int	ft_is_digit(int arg);
@@ -68,9 +74,9 @@ void	close_program(t_table *table, int flag);
 
 // Funzioni lunch.c
 void	start_lunch(t_table *table);
-void	*lunch(void *philo_ptr)
-void	*doctor()
-void	*chef()
+void	*lunch(void *philo_ptr);
+void	*doctor();
+void	*chef();
 
 // Funzioni actions.c
 void	eat(t_philo *philo);
