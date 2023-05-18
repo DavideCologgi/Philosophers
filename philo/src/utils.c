@@ -6,13 +6,13 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:42:21 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/11 15:40:36 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:48:51 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
-int	ft_isdigit(int c)
+int	ft_is_digit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
@@ -43,4 +43,36 @@ int	ft_atoi(t_table *table, const char *str)
 		close_program(table, 0);
 	}
 	return (result);
+}
+
+int	ft_strcmp(char *str1, char *str2)
+{
+	while (*str1 != '\0' && (*str1 == *str2))
+	{
+		str1++;
+		str2++;
+	}
+	return (*(char *)str1 - *(char *)str2);
+}
+
+int	ft_usleep (int time)
+{
+	int	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return (0);
+}
+
+int	get_time(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL))
+	{
+		printf("Errore di gettimeofday\n");
+		exit(1);
+	}
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }

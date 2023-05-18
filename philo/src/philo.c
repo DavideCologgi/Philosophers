@@ -6,11 +6,11 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:06:23 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/11 15:51:08 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/18 13:36:01 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 void	close_program(t_table *table, int flag)
 {
@@ -36,27 +36,25 @@ void	close_program(t_table *table, int flag)
 	exit (1);
 }
 
-int	main (int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_table	table;
 
 	table.flag_opt = 0;
-	if (argc < 5)
+	if (argc < 5 || argc > 6)
 	{
-		printf("Troppi pochi argomenti in ingresso");
+		if (argc < 5)
+			printf("Troppi pochi argomenti in ingresso");
+		else
+			printf("Troppi argomenti in ingresso");
 		close_program(&table, 0);
-	}
-	else if (argc == 5 || argc == 6)
-	{
-		if (argc == 6)
-			table.flag_opt == 1;
-		init_table(&table, argv);
-		start(&table);
 	}
 	else
 	{
-		printf("Troppi argomenti in ingresso");
-		close_program(&table, 0);
+		if (argc == 6)
+			table.flag_opt = 1;
+		init_table(&table, argv);
+		start_lunch(&table);
 	}
 	close_program(&table, 1);
 	return (0);
