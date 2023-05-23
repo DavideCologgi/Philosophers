@@ -6,13 +6,13 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 09:42:36 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 12:30:15 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:33:15 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*chef(void *philo_ptr)
+void	*doctor(void *philo_ptr)
 {
 	t_philo	*philo;
 
@@ -30,7 +30,7 @@ void	*chef(void *philo_ptr)
 	return ((void *)0);
 }
 
-void	*doctor(void *table_ptr)
+void	*chef(void *table_ptr)
 {
 	t_philo *philo;
 
@@ -70,16 +70,16 @@ void	*lunch(void *philo_ptr)
 	return ((void *)0);
 }
 
-void	start_lunch(t_table *table)
+void	start_thread(t_table *table)
 {
-	int	i;
-	pthread_t	t0;
+	int			i;
+	pthread_t	th;
 
 	i = -1;
 	table->start_time = get_time(table);
 	if (table->meals_nb > 0)
 	{
-		if (pthread_create(&t0, NULL, &chef, &table->philos[0]) != 0)
+		if (pthread_create(&th, NULL, &chef, &table->philos[0]) != 0)
 		{
 			printf("Errore creazione chef_thread\n");
 			close_program(table);

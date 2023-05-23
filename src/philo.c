@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:06:23 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 12:35:06 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:54:12 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 		if (argc == 6)
 			table.flag_opt = 1;
 		init_table(&table, argv);
-		start_lunch(&table);
+		start_thread(&table);
 	}
 	close_program(&table);
 	return (0);

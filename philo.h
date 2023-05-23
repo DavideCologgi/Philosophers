@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:03:03 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 14:19:34 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:54:21 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	init_philos(t_table *table);
 void	close_program(t_table *table);
 
 // Funzioni lunch.c
-void	start_lunch(t_table *table);
+void	start_thread(t_table *table);
 void	*lunch(void *philo_ptr);
 void	*doctor();
 void	*chef();
