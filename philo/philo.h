@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:03:03 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/18 15:24:57 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 14:19:34 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdint.h>
 
 # define TAKE_FORKS "has taken a fork"
 # define THINKING "is thinking"
@@ -31,12 +32,12 @@ typedef struct s_philo{
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
-	pthread_t		t1;
+	pthread_t		th;
+	uint64_t		time_to_die;
 	int				id;
 	int				status;
 	int				eat_count;
 	int				eating;
-	int				time_to_die;
 }	t_philo;
 
 typedef struct s_table{
@@ -45,23 +46,23 @@ typedef struct s_table{
 	pthread_mutex_t	lock;
 	pthread_mutex_t	write;
 	pthread_t		*tid;
+	uint64_t		start_time;
+	uint64_t		eat_time;
+	uint64_t		sleep_time;
+	uint64_t		die_time;
 	int				flag_opt;
 	int				philo_nb;
-	int				die_time;
-	int				eat_time;
 	int				meals_nb;
-	int				sleep_time;
-	int				start_time;
 	int				death;
 	int				finish;
 }	t_table;
 
 // Funzioni utils.c
-int	ft_is_digit(int arg);
-int	ft_atoi(t_table *table, const char *str);
-int	ft_strcmp(char *str1, char *str2);
-int	ft_usleep(int time);
-int	get_time();
+int			ft_is_digit(int arg);
+int			ft_atoi(const char *str);
+int			ft_strcmp(char *str1, char *str2);
+int			ft_usleep(uint64_t time);
+uint64_t	get_time();
 
 // Funzioni init.c
 void	init_table(t_table *table, char **argv);
@@ -70,7 +71,7 @@ void	init_malloc(t_table *table);
 void	init_forks(t_table *table);
 void	init_philos(t_table *table);
 
-void	close_program(t_table *table, int flag);
+void	close_program(t_table *table);
 
 // Funzioni lunch.c
 void	start_lunch(t_table *table);

@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 09:42:36 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/18 15:25:49 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:30:15 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ void	*lunch(void *philo_ptr)
 
 	philo = (t_philo *) philo_ptr;
 	philo->time_to_die = philo->table->die_time + get_time();
-	if (pthread_create(&philo->t1, NULL, &doctor, (void *)philo))
+	if (pthread_create(&philo->th, NULL, &doctor, (void *)philo))
 		return ((void *)1);
 	while (philo->table->death == 0)
 	{
 		eat(philo);
 		status(THINKING, philo);
 	}
-	if (pthread_join(philo->t1, NULL))
+	if (pthread_join(philo->th, NULL))
 		return ((void *)1);
 	return ((void *)0);
 }
@@ -79,18 +79,18 @@ void	start_lunch(t_table *table)
 	table->start_time = get_time(table);
 	if (table->meals_nb > 0)
 	{
-		if (pthread_create(&t0, NULL, &chef, &table->philos[0]))
+		if (pthread_create(&t0, NULL, &chef, &table->philos[0]) != 0)
 		{
-			printf("Errore creazione thread\n");
-			close_program(table, 1);
+			printf("Errore creazione chef_thread\n");
+			close_program(table);
 		}
 	}
 	while (++i < table->philo_nb)
 	{
-		if (pthread_create(&table->tid[i], NULL, &lunch, &table->philos[i]))
+		if (pthread_create(&table->tid[i], NULL, &lunch, &table->philos[i]) != 0)
 		{
 			printf("Errore creazione thread\n");
-			close_program(table, 1);
+			close_program(table);
 		}
 		ft_usleep(1);
 	}
@@ -99,8 +99,8 @@ void	start_lunch(t_table *table)
 	{
 		if (pthread_join(table->tid[i], NULL))
 		{
-			printf("Errore thread join\n");
-			close_program(table, 1);
+			printf("Errore nel join dei thread\n");
+			close_program(table);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:34:04 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/18 10:22:06 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/23 14:22:23 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,12 @@ void	check_input(t_table *table)
 	if (table->philo_nb < 1)
 	{
 		printf("Non c'é nessuno a tavola!\n");
-		close_program(table, 0);
+		exit (1);
 	}
 	else if (table->philo_nb > 200)
 	{
-		printf("Dove li metto tutti questi filosofi??? Anche meno bro\n");
-		close_program(table, 0);
-	}
-	else if (table->die_time < 0 || table->eat_time < 0
-		|| table->sleep_time < 0)
-	{
-		printf("Tempi negativi?\n");
-		close_program(table, 0);
+		printf("Dove li metto tutti questi filosofi??? Anche meno bro!\n");
+		exit (1);
 	}
 }
 
@@ -40,7 +34,7 @@ void	init_malloc(t_table *table)
 	if (!table->tid || !table->forks || !table->philos)
 	{
 		printf("Errore di allocazione\n");
-		close_program(table, 1);
+		close_program(table);
 	}
 }
 
@@ -82,19 +76,19 @@ void	init_philos(t_table *table)
 
 void	init_table(t_table *table, char **argv)
 {
-	table->philo_nb = ft_atoi(table, argv[1]);
-	table->die_time = ft_atoi(table, argv[2]);
-	table->eat_time = ft_atoi(table, argv[3]);
-	table->sleep_time = ft_atoi(table, argv[4]);
+	table->philo_nb = ft_atoi(argv[1]);
+	table->die_time = ft_atoi(argv[2]);
+	table->eat_time = ft_atoi(argv[3]);
+	table->sleep_time = ft_atoi(argv[4]);
 	if (table->flag_opt == 1)
-		table->meals_nb = ft_atoi(table, argv[5]);
+		table->meals_nb = ft_atoi(argv[5]);
 	else
 		table->meals_nb = -1;
 	table->death = 0;
 	table->finish = 0;
+	check_input(table);
 	pthread_mutex_init(&table->write, NULL);
 	pthread_mutex_init(&table->lock, NULL);
-	check_input(table);
 	init_malloc(table);
 	init_forks(table);
 	init_philos(table);
