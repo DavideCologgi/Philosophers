@@ -5,70 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/18 17:01:34 by tterribi          #+#    #+#             */
-/*   Updated: 2023/05/23 14:04:39 by dcologgi         ###   ########.fr       */
+/*   Created: 2023/05/24 15:02:23 by dcologgi          #+#    #+#             */
+/*   Updated: 2023/05/24 16:29:03 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../lib/philo.h"
+#include "../philo.h"
 
-bool	is_in_strings(char c, char *str)
+int	ft_is_digit(int c)
 {
-	while (*str)
-	{
-		if (*str == c)
-			return (true);
-		str++;
-	}
-	return (false);
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
 
-long	ft_atoi(const char *str)
+long int	ft_atoi(const char *str)
 {
-	int		sign;
-	long	result;
+	int			i;
+	long int	result;
 
-	while (is_in_strings(*(char *) str, "\t\n\v\f\r "))
-		str++;
-	sign = 1;
-	if (*str == '-')
-		sign *= -1;
-	if (*str == '-' || *str == '+')
-		str++;
+	i = 0;
 	result = 0;
-	while (*str >= '0' && *str <= '9')
+	while (str[i])
 	{
-		if (result * 10 < 0)
-			return (-1);
-		result *= 10;
-		result += *str - '0';
-		str++;
-	}
-	return (result * sign);
-}
-
-int	input_checker(char **argv)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (argv[i])
-	{
-		j = 0;
-		while (argv[i][j])
+		if (ft_is_digit(str[i]) == 0)
 		{
-			if (argv[i][j] == ' ')
-			{
-				j++;
-				continue ;
-			}
-			if ((argv[i][j] < 48 || argv[i][j] > 57))
-				return (error(ERR_IN_1, NULL));
-			j++;
+			print_error("Qualche parametro negativo e/o non numerico", NULL);
+			exit (1);
 		}
+		result = result * 10;
+		result = result + str[i] - '0';
 		i++;
 	}
+	return (result);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	while (*s1 != '\0' && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*(char *)s1 - *(char *)s2);
+}
+
+int	check_philo_nb (int	philo_nb)
+{
+	if (philo_nb < 1)
+		return (print_error("Non c'é nessuno a tavola", NULL));
+	if (philo_nb > 200)
+		return( print_error("Dove li metto tutti questi filosofi!?", NULL));
 	return (0);
 }
 
@@ -80,14 +67,4 @@ int	ft_usleep(uint64_t time)
 	while ((get_time() - start) < time)
 		usleep(time / 10);
 	return (0);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	while (*s1 != '\0' && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return (*(char *)s1 - *(char *)s2);
 }

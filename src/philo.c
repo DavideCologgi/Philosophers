@@ -6,71 +6,58 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 12:41:22 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/24 12:42:08 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:21:58 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	case_one(t_data *data)
+void	clear_table(t_table	*table)
 {
-	data->start_time = get_time();
-	if (pthread_create(&data->tid[0], NULL, &routine, &data->philos[0]))
-		return (error(TH_ERR, data));
-	pthread_detach(data->tid[0]);
-	while (data->dead == 0)
-		ft_usleep(0);
-	ft_exit(data);
-	return (0);
+	if (table->tid)
+		free(table->tid);
+	if (table->forks)
+		free(table->forks);
+	if (table->philos)
+		free(table->philos);
 }
 
-void	clear_data(t_data	*data)
-{
-	if (data->tid)
-		free(data->tid);
-	if (data->forks)
-		free(data->forks);
-	if (data->philos)
-		free(data->philos);
-}
-
-void	ft_exit(t_data *data)
+void	close_program(t_table *table)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->philo_num)
+	while (++i < table->philo_nb)
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philos[i].lock);
+		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philos[i].lock);
 	}
-	pthread_mutex_destroy(&data->write);
-	pthread_mutex_destroy(&data->lock);
-	clear_data(data);
+	pthread_mutex_destroy(&table->write);
+	pthread_mutex_destroy(&table->lock);
+	clear_table(table);
 }
 
-int	error(char *str, t_data *data)
+int	print_error(char *str, t_table *table)
 {
 	printf("%s\n", str);
-	if (data)
-		ft_exit(data);
+	if (table)
+		close_program(table);
 	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_table	table;
 
 	if (argc < 5 || argc > 6)
+	{
+		printf("Numero parametri errato\n");
 		return (1);
-	if (input_checker(argv))
+	}
+	if (init(&table, argv, argc))
 		return (1);
-	if (init(&data, argv, argc))
+	if (start_thread(&table))
 		return (1);
-	if (data.philo_num == 1)
-		return (case_one(&data));
-	if (thread_init(&data))
-		return (1);
-	ft_exit(&data);
+	close_program(&table);
 	return (0);
 }

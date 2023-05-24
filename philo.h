@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:03:03 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/24 14:16:06 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:15:00 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,30 +61,33 @@ typedef struct s_table{
 // Funzioni utils.c
 int			ft_is_digit(int arg);
 int			ft_strcmp(char *str1, char *str2);
-int			ft_usleep(unsigned int time);
-long		ft_atoi(const char *str);
-uint64_t	get_time();
+int			ft_usleep(uint64_t time);
+int			check_philo_nb (int	philo_nb);
+long int	ft_atoi(const char *str);
 
 // Funzioni init.c
-void	init_table(t_table *table, char **argv);
-void	check_input(t_table *table);
-void	init_malloc(t_table *table);
-void	init_forks(t_table *table);
+int		put_forks(t_table *table);
+int		init_malloc(t_table *table);
+int		init(t_table *table, char **argv, int argc);
 void	init_philos(t_table *table);
-
-int		close_program(t_table *table);
+void	init_table(t_table *table, char **argv);
 
 // Funzioni lunch.c
 int		start_thread(t_table *table);
 void	*lunch(void *philo_ptr);
-void	*doctor();
-void	*chef();
+void	*doctor(void *philo_ptr);
+void	*chef(void *table_ptr);
 
 // Funzioni actions.c
-void	eat(t_philo *philo);
-void	take_forks(t_philo *philo);
-void	drop_forks(t_philo *philo);
-void	status(char *str, t_philo *philo);
+void		eat_meal(t_philo *philo);
+void		take_forks(t_philo *philo);
+void		drop_forks(t_philo *philo);
+void		status(char *str, t_philo *philo);
+uint64_t	get_time();
 
+// Funzioni main.c
+int		print_error(char *str, t_table *table);
+void	close_program(t_table *table);
+void	clear_table(t_table	*table);
 
 #endif

@@ -5,92 +5,88 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/18 17:12:13 by tterribi          #+#    #+#             */
-/*   Updated: 2023/05/23 14:06:25 by dcologgi         ###   ########.fr       */
+/*   Created: 2023/05/24 15:01:50 by dcologgi          #+#    #+#             */
+/*   Updated: 2023/05/24 16:18:39 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../lib/philo.h"
+#include "../philo.h"
 
-int	alloc(t_data *data)
+int	init_malloc(t_table *table)
 {
-	data->tid = malloc(sizeof(pthread_t) * data->philo_num);
-	if (!data->tid)
-		return (error(ALLOC_ERR_1, data));
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_num);
-	if (!data->forks)
-		return (error(ALLOC_ERR_2, data));
-	data->philos = malloc(sizeof(t_philo) * data->philo_num);
-	if (!data->philos)
-		return (error(ALLOC_ERR_3, data));
+	table->tid = malloc(sizeof(pthread_t) * table->philo_nb);
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->philo_nb);
+	table->philos = malloc(sizeof(t_philo) * table->philo_nb);
+	if (!table->tid || !table->forks || !table->philos)
+		return (print_error("Errore nel malloc\n", table));
 	return (0);
 }
 
-int	init_forks(t_data *data)
+int	put_forks(t_table *table)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->philo_num)
-		pthread_mutex_init(&data->forks[i], NULL);
+	while (++i < table->philo_nb)
+		pthread_mutex_init(&table->forks[i], NULL);
 	i = 0;
-	data->philos[0].l_fork = &data->forks[0];
-	data->philos[0].r_fork = &data->forks[data->philo_num - 1];
+	table->philos[0].l_fork = &table->forks[0];
+	table->philos[0].r_fork = &table->forks[table->philo_nb - 1];
 	i = 1;
-	while (i < data->philo_num)
+	while (i < table->philo_nb)
 	{
-		data->philos[i].l_fork = &data->forks[i];
-		data->philos[i].r_fork = &data->forks[i - 1];
+		table->philos[i].l_fork = &table->forks[i];
+		table->philos[i].r_fork = &table->forks[i - 1];
 		i++;
 	}
 	return (0);
 }
 
-void	init_philos(t_data *data)
+void	init_philos(t_table *table)
 {
 	int	i;
 
 	i = 0;
-	while (i < data->philo_num)
+	while (i < table->philo_nb)
 	{
-		data->philos[i].data = data;
-		data->philos[i].id = i + 1;
-		data->philos[i].time_to_die = data->death_time;
-		data->philos[i].eat_cont = 0;
-		data->philos[i].eating = 0;
-		data->philos[i].status = 0;
-		pthread_mutex_init(&data->philos[i].lock, NULL);
+		table->philos[i].table = table;
+		table->philos[i].id = i + 1;
+		table->philos[i].time_to_die = table->die_time;
+		table->philos[i].eat_count = 0;
+		table->philos[i].eating = 0;
+		table->philos[i].status = 0;
+		pthread_mutex_init(&table->philos[i].lock, NULL);
 		i++;
 	}
 }
 
-int	init_data(t_data *data, char **argv, int argc)
+int	prepare_table(t_table *table, char **argv, int argc)
 {
-	data->philo_num = (int) ft_atoi(argv[1]);
-	data->death_time = (uint64_t) ft_atoi(argv[2]);
-	data->eat_time = (uint64_t) ft_atoi(argv[3]);
-	data->sleep_time = (uint64_t) ft_atoi(argv[4]);
+	table->philo_nb = (int) ft_atoi(argv[1]);
+	if (check_philo_nb(table->philo_nb))
+		return (1);
+	table->die_time = (uint64_t) ft_atoi(argv[2]);
+	table->eat_time = (uint64_t) ft_atoi(argv[3]);
+	table->sleep_time = (uint64_t) ft_atoi(argv[4]);
 	if (argc == 6)
-		data->meals_nb = (int) ft_atoi(argv[5]);
+		table->min_meals = (int) ft_atoi(argv[5]);
 	else
-		data->meals_nb = -1;
-	if (data->philo_num <= 0 || data->philo_num > 200)
-		return (error(ERR_IN_2, NULL));
-	data->dead = 0;
-	data->finished = 0;
-	pthread_mutex_init(&data->write, NULL);
-	pthread_mutex_init(&data->lock, NULL);
+		table->min_meals = -1;
+	table->death = 0;
+	table->finish = 0;
+	pthread_mutex_init(&table->write, NULL);
+	pthread_mutex_init(&table->lock, NULL);
 	return (0);
 }
 
-int	init(t_data *data, char **argv, int argc)
+int	init(t_table *table, char **argv, int argc)
 {
-	if (init_data(data, argv, argc))
+	if (prepare_table(table, argv, argc))
 		return (1);
-	if (alloc(data))
+	if (init_malloc(table))
 		return (1);
-	if (init_forks(data))
+	if (put_forks(table))
 		return (1);
-	init_philos(data);
+	init_philos(table);
 	return (0);
 }
