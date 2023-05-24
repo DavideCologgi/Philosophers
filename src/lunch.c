@@ -5,20 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 09:42:36 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 16:33:15 by dcologgi         ###   ########.fr       */
+/*   Created: 2023/05/24 12:41:48 by dcologgi          #+#    #+#             */
+/*   Updated: 2023/05/24 14:16:46 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*doctor(void *philo_ptr)
+void	*chef(void *data_pointer)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)philo_ptr;
+	philo = (t_philo *) data_pointer;
 	pthread_mutex_lock(&philo->table->write);
-	printf("data val: %d", philo->table->death);
+	printf("val: %d", philo->table->death);
 	pthread_mutex_unlock(&philo->table->write);
 	while (philo->table->death == 0)
 	{
@@ -30,17 +30,17 @@ void	*doctor(void *philo_ptr)
 	return ((void *)0);
 }
 
-void	*chef(void *table_ptr)
+void	*doctor(void *philo_ptr)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
-	philo = (t_philo *)table_ptr;
+	philo = (t_philo *) philo_ptr;
 	while (philo->table->death == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
 		if (get_time() >= philo->time_to_die && philo->eating == 0)
-			status(DIED, philo);
-		if (philo->eat_count == philo->table->meals_nb)
+			messages(DIED, philo);
+		if (philo->eat_count == philo->table->min_meals)
 		{
 			pthread_mutex_lock(&philo->table->lock);
 			philo->table->finish++;
@@ -70,37 +70,29 @@ void	*lunch(void *philo_ptr)
 	return ((void *)0);
 }
 
-void	start_thread(t_table *table)
+int	thread_init(t_table *table)
 {
 	int			i;
-	pthread_t	th;
+	pthread_t	t0;
 
 	i = -1;
-	table->start_time = get_time(table);
+	table->start_time = get_time();
 	if (table->meals_nb > 0)
 	{
-		if (pthread_create(&th, NULL, &chef, &table->philos[0]) != 0)
-		{
-			printf("Errore creazione chef_thread\n");
-			close_program(table);
-		}
+		if (pthread_create(&t0, NULL, &chef, &table->philos[0]))
+			return (error(TH_ERR, table));
 	}
-	while (++i < table->philo_nb)
+	while (++i < table->philo_num)
 	{
-		if (pthread_create(&table->tid[i], NULL, &lunch, &table->philos[i]) != 0)
-		{
-			printf("Errore creazione thread\n");
-			close_program(table);
-		}
+		if (pthread_create(&table->tid[i], NULL, &lunch, &table->philos[i]))
+			return (error(TH_ERR, table));
 		ft_usleep(1);
 	}
 	i = -1;
-	while (++i < table->philo_nb)
+	while (++i < table->philo_num)
 	{
 		if (pthread_join(table->tid[i], NULL))
-		{
-			printf("Errore nel join dei thread\n");
-			close_program(table);
-		}
+			return (error(JOIN_ERR, table));
 	}
+	return (0);
 }

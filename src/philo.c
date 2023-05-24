@@ -5,54 +5,72 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 10:06:23 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 15:54:12 by dcologgi         ###   ########.fr       */
+/*   Created: 2023/05/24 12:41:22 by dcologgi          #+#    #+#             */
+/*   Updated: 2023/05/24 12:42:08 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	close_program(t_table *table)
+int	case_one(t_data *data)
+{
+	data->start_time = get_time();
+	if (pthread_create(&data->tid[0], NULL, &routine, &data->philos[0]))
+		return (error(TH_ERR, data));
+	pthread_detach(data->tid[0]);
+	while (data->dead == 0)
+		ft_usleep(0);
+	ft_exit(data);
+	return (0);
+}
+
+void	clear_data(t_data	*data)
+{
+	if (data->tid)
+		free(data->tid);
+	if (data->forks)
+		free(data->forks);
+	if (data->philos)
+		free(data->philos);
+}
+
+void	ft_exit(t_data *data)
 {
 	int	i;
 
 	i = -1;
-	while (++i < table->philo_nb)
+	while (++i < data->philo_num)
 	{
-		pthread_mutex_destroy(&table->forks[i]);
-		pthread_mutex_destroy(&table->philos[i].lock);
+		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philos[i].lock);
 	}
-	pthread_mutex_destroy(&table->write);
-	pthread_mutex_destroy(&table->lock);
-	if (table->tid)
-		free(table->tid);
-	if (table->forks)
-		free(table->forks);
-	if (table->philos)
-		free(table->philos);
-	exit (1);
+	pthread_mutex_destroy(&data->write);
+	pthread_mutex_destroy(&data->lock);
+	clear_data(data);
+}
+
+int	error(char *str, t_data *data)
+{
+	printf("%s\n", str);
+	if (data)
+		ft_exit(data);
+	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_table	table;
+	t_data	data;
 
-	table.flag_opt = 0;
 	if (argc < 5 || argc > 6)
-	{
-		if (argc < 5)
-			printf("Troppi pochi argomenti in ingresso\n");
-		else
-			printf("Troppi argomenti in ingresso\n");
-		exit (1);
-	}
-	else
-	{
-		if (argc == 6)
-			table.flag_opt = 1;
-		init_table(&table, argv);
-		start_thread(&table);
-	}
-	close_program(&table);
+		return (1);
+	if (input_checker(argv))
+		return (1);
+	if (init(&data, argv, argc))
+		return (1);
+	if (data.philo_num == 1)
+		return (case_one(&data));
+	if (thread_init(&data))
+		return (1);
+	ft_exit(&data);
 	return (0);
 }

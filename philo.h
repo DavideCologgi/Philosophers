@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 10:03:03 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/23 15:54:21 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:16:06 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <sys/types.h>
 # include <stdint.h>
 
 # define TAKE_FORKS "has taken a fork"
@@ -52,16 +53,16 @@ typedef struct s_table{
 	uint64_t		die_time;
 	int				flag_opt;
 	int				philo_nb;
-	int				meals_nb;
+	int				min_meals;
 	int				death;
 	int				finish;
 }	t_table;
 
 // Funzioni utils.c
 int			ft_is_digit(int arg);
-int			ft_atoi(const char *str);
 int			ft_strcmp(char *str1, char *str2);
-int			ft_usleep(uint64_t time);
+int			ft_usleep(unsigned int time);
+long		ft_atoi(const char *str);
 uint64_t	get_time();
 
 // Funzioni init.c
@@ -71,10 +72,10 @@ void	init_malloc(t_table *table);
 void	init_forks(t_table *table);
 void	init_philos(t_table *table);
 
-void	close_program(t_table *table);
+int		close_program(t_table *table);
 
 // Funzioni lunch.c
-void	start_thread(t_table *table);
+int		start_thread(t_table *table);
 void	*lunch(void *philo_ptr);
 void	*doctor();
 void	*chef();
