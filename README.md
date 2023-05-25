@@ -21,15 +21,13 @@ The simulation stops when a philosopher dies of starvation. 💀
 <p>
 The program take the following arguments in order:
 <p>
-"number_of_philosophers" "time_to_die" "time_to_eat" "time_to_sleep" and an optionable "number_of_times_each_philosopher_must_eat"
+𝟏: number_of_philosophers: The number of philosophers and also the number of forks
 <p>
-• number_of_philosophers: The number of philosophers and also the number of forks
+2: time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
 <p>
-• time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
+3: time_to_eat (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
 <p>
-• time_to_eat (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
+4: time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
 <p>
-• time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
-<p>
-• number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
+5: number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
 <p>
