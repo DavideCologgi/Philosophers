@@ -1,10 +1,13 @@
 # Philosophers
 One or more philosophers sit at a round table and there is a large bowl of spaghetti in the middle of the table.
-
+<p>
 General rules:
 • The philosophers alternatively eat, think, or sleep
+<p>
   While they are eating, they are not thinking nor sleeping;
+<p>
   while thinking, they are not eating nor sleeping;
+<p>
   while sleeping, they are not eating nor thinking.
 • There are also forks on the table. There are as many forks as philosophers
 • Because serving and eating spaghetti with only one fork is very inconvenient, a
