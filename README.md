@@ -14,6 +14,7 @@ General rules:
 • There are also forks on the table. There are as many forks as philosophers
 <p>
 • Because serving and eating spaghetti with only one fork is very inconvenient, a philosopher takes their right and their left forks to eat, one in each hand
+<p>
 • When a philosopher has finished eating, they put their forks back on the table and start sleeping. Once awake, they start thinking again.
 <p>
 The simulation stops when a philosopher dies of starvation.
