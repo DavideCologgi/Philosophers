@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 12:41:48 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/24 16:12:48 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/25 10:16:49 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ void	*chef(void *table_ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *) table_ptr;
-	pthread_mutex_lock(&philo->table->write);
-	printf("val: %d", philo->table->death);
-	pthread_mutex_unlock(&philo->table->write);
 	while (philo->table->death == 0)
 	{
 		pthread_mutex_lock(&philo->lock);
@@ -39,7 +36,7 @@ void	*doctor(void *philo_ptr)
 	{
 		pthread_mutex_lock(&philo->lock);
 		if (get_time() >= philo->time_to_die && philo->eating == 0)
-			status(DIED, philo);
+			print_status(DIED, philo);
 		if (philo->eat_count == philo->table->min_meals)
 		{
 			pthread_mutex_lock(&philo->table->lock);
@@ -63,7 +60,7 @@ void	*lunch(void *philo_ptr)
 	while (philo->table->death == 0)
 	{
 		eat_meal(philo);
-		status(THINKING, philo);
+		print_status(THINKING, philo);
 	}
 	if (pthread_join(philo->th, NULL))
 		return ((void *)1);

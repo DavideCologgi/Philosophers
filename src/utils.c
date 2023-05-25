@@ -6,7 +6,7 @@
 /*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 15:02:23 by dcologgi          #+#    #+#             */
-/*   Updated: 2023/05/24 16:29:03 by dcologgi         ###   ########.fr       */
+/*   Updated: 2023/05/25 09:30:40 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ int	ft_strcmp(char *s1, char *s2)
 	return (*(char *)s1 - *(char *)s2);
 }
 
-int	check_philo_nb (int	philo_nb)
+int	check_philo_nb(int philo_nb)
 {
 	if (philo_nb < 1)
 		return (print_error("Non c'é nessuno a tavola", NULL));
 	if (philo_nb > 200)
-		return( print_error("Dove li metto tutti questi filosofi!?", NULL));
+		return (print_error("Dove li metto tutti questi filosofi!?", NULL));
 	return (0);
 }
 
