@@ -1,23 +1,23 @@
-# Philosophers
+# Philosophers 💭
 One or more philosophers sit at a round table and there is a large bowl of spaghetti in the middle of the table.
 <p>
 General rules:
 <p>
-• The philosophers alternatively eat, think, or sleep
+• The philosophers alternatively eat, think, or sleep 🍽💭💤
 <p>
-  While they are eating, they are not thinking nor sleeping;
+  While they are eating, they are not thinking nor sleeping; 🍽
 <p>
-  while thinking, they are not eating nor sleeping;
+  while thinking, they are not eating nor sleeping; 💭
 <p>
-  while sleeping, they are not eating nor thinking.
+  while sleeping, they are not eating nor thinking. 💤
 <p>
-• There are also forks on the table. There are as many forks as philosophers
+• There are also forks on the table. There are as many forks as philosophers 🍴
 <p>
 • Because serving and eating spaghetti with only one fork is very inconvenient, a philosopher takes their right and their left forks to eat, one in each hand
 <p>
 • When a philosopher has finished eating, they put their forks back on the table and start sleeping. Once awake, they start thinking again.
 <p>
-The simulation stops when a philosopher dies of starvation.
+The simulation stops when a philosopher dies of starvation. 💀
 <p>
 The program take the following arguments in order:
 <p>
@@ -31,5 +31,5 @@ The program take the following arguments in order:
 <p>
 ◦ time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
 <p>
-◦ number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least    number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
+◦ number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
 <p>
