@@ -31,5 +31,5 @@ The program take the following arguments in order:
 <p>
 ◦ time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
 <p>
-◦ number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
+◦ number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least <\n> number_of_times_each_philosopher_must_eat times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
 <p>
